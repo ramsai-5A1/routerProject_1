@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-const SignupForm = () => {
+const SignupForm = ({setIsLoggedIn}) => {
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         firstName:'',
@@ -19,6 +23,24 @@ const SignupForm = () => {
     }
 
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        if(formData.password === formData.confirmPassword) {
+            setIsLoggedIn(true);
+            toast.success("Signup Success");
+            const accountData = {
+                ...formData
+            };
+            console.log("Printing account data ");
+            console.log(accountData);
+            navigate('/dashboard');
+        } else {
+            toast.error("Passwords do not match");
+        }
+        
+    }
 
     return (
         <div>
@@ -32,7 +54,7 @@ const SignupForm = () => {
                 </button>
             </div>
 
-            <form>
+            <form onSubmit={submitHandler}>
             {/* firstname and lastname */}
                 <div>
                     <label>
@@ -40,7 +62,7 @@ const SignupForm = () => {
                         <input
                             required
                             type='text'
-                            name='firstname'
+                            name='firstName'
                             onChange={changeHandler}
                             placeholder="Enter first name"
                             value={formData.firstName}
@@ -94,15 +116,15 @@ const SignupForm = () => {
                         <p>Confirm password<sup>*</sup></p>
                         <input 
                             required
-                            type={showPassword ? ("text") : ("password")}
+                            type={showConfirmPassword ? ("text") : ("password")}
                             name='confirmPassword'
                             placeholder="Confirm Password"
                             value={formData.confirmPassword}
                             onChange={changeHandler}
                         />
 
-                        <span onClick={() => setShowPassword((prev) => !prev)}>
-                            {showPassword ? (<AiOutlineEyeInvisible/>) : (<AiOutlineEye/>)}
+                        <span onClick={() => setShowConfirmPassword((prev) => !prev)}>
+                            {showConfirmPassword ? (<AiOutlineEyeInvisible/>) : (<AiOutlineEye/>)}
                         </span>
                     </label>
                 </div>

@@ -35,8 +35,13 @@ const SignupForm = ({setIsLoggedIn}) => {
             const accountData = {
                 ...formData
             };
-            console.log("Printing account data ");
-            console.log(accountData);
+
+            const finalData = {
+                ...accountData,
+                accountType
+            }
+            console.log("Printing Final account data ");
+            console.log(finalData);
             navigate('/dashboard');
         } else {
             toast.error("Passwords do not match");
